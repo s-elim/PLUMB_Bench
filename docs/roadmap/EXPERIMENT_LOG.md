@@ -182,3 +182,73 @@ output was inspected against its success criterion. Environment unless stated: W
 ## E-006 Generator and validator unit tests (2026-10-17)
 - `python -m pytest -q tests/test_dataset_validation.py tests/test_generation.py tests/test_task_registry.py tests/test_dataset_recording.py tests/test_converters.py`
 - Outcome: all pass (validator 15, generation 4, registry 638, recording + converters 13).
+
+## E-020 Matched mid-execution events, all 210 tasks (2026-11-01, done)
+- Command: `python -I scripts/diagnostic_probes.py events --workers 22 --out docs/roadmap/evidence/probe_events_2026-11-01.json`
+  (n = 2 seeds per task), HEAD 0112f5e with the new untracked script `scripts/diagnostic_probes.py`
+  (sha256 87634dae...634b). 548 s on 22 workers. Seeds: 1,300,000 + 1000 n + j.
+- Protocol (paper Sec. III-F): event body = first moved body whose start is a Region; trigger t* = first Base step with
+  the hand within 3 cm horizontally and at most 15 cm above the body, body not grasped; Dynamic arm = exact replay of
+  the Base actions to t*, displacement 3 cm along +x/-x/+y/-y with zero velocity, valid only if the support height
+  under the new position is within 3 mm of the old one and no contact penetrates more than 1 mm; continuation by the
+  closed-loop oracle (budget H - t*) or by the Base actions open loop (then holding still).
+- Outcome: 154 of 210 tasks have an event body; all 154 yield valid pairs: 921 pairs (311 directions rejected:
+  penetration 269, support change 31, off table 11). Prefix exact (bit-identical simulator state at t*) 921/921;
+  median t* = 18 steps. Oracle: (1,1) 898, (1,0) 22, (0,0) 1 -> Dynamic SR 97.5%, CRR 22/920 = 2.4%. Open-loop
+  continuation: (1,1) 13, (1,0) 907, (0,0) 1 -> Dynamic SR 1.4%, CRR 907/920 = 98.6%. Base open-loop replay
+  reproduced the Base oracle outcome in every case. Per domain, oracle Dynamic SR: D1 124/134, D2 61/62, D3 200/202,
+  D4 68/68, D5 140/141, D6 153/161, D7 152/153.
+- Note: the existing `afford_pro/dynamic_suite.py` runs on the legacy task set (AUDIT_2026-11-01 A-44) and was not used.
+
+## E-021 Trajectory-replay (memorization) probe, all 210 tasks (2026-11-01, done)
+- Command: `python -I scripts/diagnostic_probes.py replay --workers 22 --out docs/roadmap/evidence/probe_replay_2026-11-01.json`
+  (n = 3 pairs per task), same code as E-020. 958 s. Seeds: layout A 1,100,000 + 1000 n + j, layout B = A + 500.
+- Protocol: a nominal oracle episode on layout A is recorded; its actions are replayed open loop (then holding still to
+  the budget) on A nominal, on A under L4 (same layout, friction and mass shifted), on B nominal and on B under L2. The
+  closed-loop oracle runs on the same seeds and suites.
+- Outcome: oracle source success 629/630 (task 60 failed once). Replay / oracle: same layout L1 629/629 / 629/629
+  (exact reproduction); same layout L4 510/629 (81.1%) / 621/629 (98.7%); new layout L1 56/629 (8.9%) / 629/629 (100%);
+  new layout L2 43/629 (6.8%) / 611/629 (97.1%). By tolerance tier of the task's tightest placement goal (replay,
+  L4 same / L1 new / L2 new): precision <= 2.5 mm (165 pairs) 62.4 / 1.8 / 1.8%; 6-8 mm (156) 84.6 / 2.6 / 1.3%;
+  region (206) 85.9 / 7.3 / 4.4%; no placement goal (102) 96.1 / 33.3 / 28.4%. Tasks with a placement goal: new
+  layout L1 22/527 (4.2%), L2 14/527 (2.7%). Chains D5/D6/D7 under L4 same layout: 60.0 / 63.3 / 68.9%.
+- Telemetry (logged, not a success criterion): peak servo torque reaches the actuator limit in every episode; peak net
+  contact force exceeds 150 N in some oracle episodes, largest 1040 N (task 122, a transient). See A-46.
+
+## E-022 Goal-localization error probe, all 210 tasks (2026-11-01, done)
+- Command: `python -I scripts/diagnostic_probes.py localization --workers 22 --out docs/roadmap/evidence/probe_localization_2026-11-01.json`
+  (n = 2 episodes per task and error), same code as E-020/E-021 (sha256 87634dae...634b). 788 s.
+  Seeds: 1,200,000 + 1000 n + j; the same seed at every error level (paired layouts).
+- Protocol: the oracle's estimate of every placement goal (`goal_position`, read only by its placement routine) is
+  offset horizontally by eps in {0, 1, 2, 3, 4, 6, 8, 12, 16} mm, in a direction drawn per episode and goal
+  (rng seeded by task and episode) and kept across eps. Success is the unchanged benchmark check. The oracle keeps its
+  closed-loop re-centring and its three placement attempts (retry decided from the true state).
+- Outcome: 176 tasks have a placement goal (34 do not). Success by tier of the task's tightest placement goal:
+  precision <= 2.5 mm (55 tasks, 110 episodes per eps): 100, 100, 76.4, 50.9, 57.3, 30.0, 15.5, 0, 0% at
+  0/1/2/3/4/6/8/12/16 mm; 6-8 mm (52 tasks, 104): 100, 100, 100, 98.1, 97.1, 89.4, 52.9, 0, 0%; region (69 tasks,
+  138): 100, 100, 98.6, 99.3, 98.6, 98.6, 97.8, 88.4, 81.2%.
+
+## E-024 Start-layout pairing across suites, all 210 tasks (2026-11-01, done)
+- Command: `python -I scripts/diagnostic_probes.py pairing --workers 20 --out docs/roadmap/evidence/probe_pairing_2026-11-01.json`
+  (n = 3: the layout-A seeds of E-021), revised script after the code review (adds the pairing and null-event modes).
+- Protocol: for each seed, reset the nominal, p1_object (Color), p3_visual, p4_physical, p2_spatial and combined_ood
+  environments and compare the horizontal start positions of the moved bodies (L1 vs Color/L3/L4; L2 vs L5).
+- Outcome (630 seeds, no start fallback): Color and L3 equal L1 exactly on every seed. L4 equals L1 within 0.1 mm on
+  622/630 seeds (98.7%); 8 seeds differ by more than 1 mm (up to 30 mm). L5 equals L2 within 1 mm on 611/630 (97.0%;
+  572 within 0.01 mm; up to 190 mm). Cause: the start check settles bodies under the suite's physics, so heavier or
+  more slippery bodies are occasionally rejected and a further start is drawn (AUDIT A-51).
+- Consequence for E-021: the "same layout, L4" replay condition is reported on the 621 source pairs whose L4 layout
+  equals the nominal one: replay 508/621 (81.8%), oracle 615/621 (99.0%); 2 mm tier 103/165 (62.4%), 6-8 mm 132/150
+  (88.0%), region 175/204 (85.8%); D5/D6/D7 61.4/63.3/72.1%. (All 629 pairs: 81.1% / 98.7%.)
+
+## E-023 Matched mid-execution events, re-run with controls (2026-11-01, done; supersedes E-020 in the paper)
+- Command: as E-020, output `docs/roadmap/evidence/probe_events_2026-11-01_r2.json`, script revised after the code
+  review: a null event per case (same prefix, fresh oracle, no displacement), a direct check of the replayed prefix
+  against the Base oracle's recorded state at t*, the grasp state at the trigger, and the displaced body placed at its
+  old clearance above the new support (no drop).
+- Outcome: identical pair outcomes to E-020: 154 tasks, 921 valid pairs (invalid: penetration 269, support change 31,
+  off table 11); oracle (1,1) 898, (1,0) 22, (0,0) 1; open loop (1,1) 13, (1,0) 907, (0,0) 1. Over the 302 cases with a
+  valid pair: replayed prefix equals the Base oracle state 302/302; Base replay reproduces the Base outcome and step
+  count 302/302; null event (1,1) 300, (1,0) 1, (0,1) 1, i.e. the restart alone changes 2 of 302 outcomes; the hand
+  held another body at the trigger in 2 of 302 cases.
+- Script for E-023 and E-024: `scripts/diagnostic_probes.py` sha256 916f0b2f...42c1 (E-020..E-022: 87634dae...634b); HEAD 0112f5e.

@@ -1,7 +1,8 @@
 # Progress
 
-Last updated: 2026-10-17, end of session 1 (stopped at the usage limit). Verdict: **NOT YET SUBMISSION-READY**
-(no learned-policy results; L4 range uncalibrated; author decisions D1-D8 open; nothing committed).
+Last updated: 2026-11-01, session 4. Verdict: **Stage 1 manuscript complete** (RSS 2027 extended abstract, 5 + 1
+pages, every number traced to `evidence/`); open for Stage 2: datasets (D9) and learned-policy baselines on the GPU
+server. Session 1 header (2026-10-17): no learned-policy results; L4 range uncalibrated; author decisions D1-D8 open.
 
 ## Done this session (evidence in EXPERIMENT_LOG.md E-001..E-011, findings A-01..A-28)
 - Audit of code, data, paper, prior reviews; literature comparison (`LITERATURE_COMPARISON.md`, spot-checked).
@@ -61,6 +62,33 @@ Last updated: 2026-10-17, end of session 1 (stopped at the usage limit). Verdict
 - 2026-10-20 (authors' request): the legacy datasets were deleted permanently (210 files, 460.6 GB, and the 7-file
   `datasets/archive_oct03_audit_evidence/`, 18 GB; D: now has 1.6 TB free). Their validation reports (E-002, E-007)
   stay in `evidence/`, but those files can no longer be re-checked.
+
+## Session 4 (2026-11-01): audit and RSS 2027 Stage 1 rewrite
+- Format confirmed from the official CFP: Stage 1 = 5 content pages + 1 reference page, double-blind, no supplement,
+  no external links, due 4 Dec 2026 AoE. The paper was rewritten for it (`AFFORD-Bench_RSS'27/paper-template-latex/`,
+  previous draft archived in `archive_2026-10-19/`); figures and every quoted number come from
+  `figures/src/make_figures.py` (writes `figures/src/numbers.json`); gallery renders from `figures/src/render_gallery.py`.
+- Audit of the 2026-10-29 commit and the paper: `AUDIT_2026-11-01.md` (A-43..A-50). Key points: README/spec advertise
+  240 tasks and a force/torque "compliant success" metric that is not validated (D8 unaudited; `dynamic_suite.py` runs
+  on the legacy task set; GoalFrankaEnv skips the base telemetry hook; the torque criterion saturates in every oracle
+  episode). The paper uses only the 210 validated tasks and reports force as telemetry.
+- New evidence with `scripts/diagnostic_probes.py` (committed 2026-11-02 with its `evidence/probe_*` outputs): E-020/E-023 matched mid-execution
+  events (921 pairs, oracle Dynamic SR 97.5%, open loop 1.4%, null restart 301/302), E-021 trajectory replay (new
+  layout 8.9% vs oracle 100%), E-022 goal-localization error (2 mm tier 50.9% at 3 mm, 0% at 12 mm), E-024 layout
+  pairing (L3/Color exact; L4 98.7%, L5 97.0%; A-51). A code review of the script found no off-by-one or leakage; its
+  HIGH item (no null-event control) was fixed in E-023. Full test suite: 2452 passed, 1 skipped.
+- Paper: `main.pdf` builds to 6 pages, Type 1 fonts, no page numbers, anonymous metadata, 28 verified references.
+  Author item: fill the OpenReview Paper-ID in the author line.
+
+## Session 5 (2026-11-02): comparison figure
+- The bar-style comparison figure was replaced, at the user's request, by a full-width card figure (Fig. 2, top of
+  page 2): 7 benchmarks (Meta-World, LIBERO, -PRO, -Plus, -X, -MAX, AFFORD-Bench) x 9 design dimensions. Every cell
+  is sourced (LITERATURE_COMPARISON.md, the LIBERO-MAX repo README, Meta-World code checked 2026-11-02, main.tex);
+  no value from the quarantined `benchmark_comparison.png` is reused. Script: `figures/src/make_compare_figure.py`
+  (bar version kept as `make_compare_figure_bars.py`). The paper folder stays local (gitignored).
+- **Open: page limit.** Body text now runs about 22 lines onto page 6 (it was about 10 before, the Conclusion);
+  Stage 1 allows 5 content pages. Trim Related Work Sec. II-B (now covered by Fig. 2) and tighten prose, or drop
+  figure rows.
 
 ## Decisions required from the authors
 - D9 Generate `datasets/` for the benchmark (210 tasks x 50 demos with images), deferred. Estimate from the
