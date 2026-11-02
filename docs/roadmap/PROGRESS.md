@@ -116,7 +116,9 @@ server. Session 1 header (2026-10-17): no learned-policy results; L4 range uncal
   videos `docs/videos/`, and `docs/images/`. All are recoverable from git history; their generators
   (`scripts/build_site_data.py`, `scripts/export_project_videos.py`, `scripts/generate_paper_figures.py`) are kept.
   README redesigned (centred header, key numbers, figures, collapsible sections).
-- Open: `docs/BENCHMARK_SPEC.md` still has the old framing (A-43, A-47).
+- `docs/BENCHMARK_SPEC.md` rewritten to match the paper (A-43, A-47 closed); `.gitignore` now ignores any local
+  paper folder (`AFFORD-Bench_RSS'27/`, `PLUMB-Bench_RSS*/`, `*_RSS'NN/`, `/paper/`, `/paper-template-latex/`).
+  Homepage card and research-ideas page, and the GitHub profile README, now name PLUMB-Bench.
 
 ## Decisions required from the authors
 - D9 Generate `datasets/` for the benchmark (210 tasks x 50 demos with images), deferred. Estimate from the
