@@ -1,4 +1,4 @@
-"""Export lightweight demo videos from AFFORD-Bench HDF5 datasets for the project page."""
+"""Export lightweight demo videos from PLUMB-Bench HDF5 datasets for the project page."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -141,7 +141,7 @@ def export_task_video(task_info: dict, max_frames: int = 150):
 
 def main():
     print("=" * 60)
-    print(" AFFORD-Bench: Project Page Video Exporter")
+    print(" PLUMB-Bench: Project Page Video Exporter")
     print(f" Output Directory: {VIDEOS_DIR}")
     print("=" * 60)
 

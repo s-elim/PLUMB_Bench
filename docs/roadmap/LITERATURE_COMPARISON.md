@@ -1,4 +1,4 @@
-# Literature and Benchmark-Comparison Audit (AFFORD-Bench, RSS 2027)
+# Literature and Benchmark-Comparison Audit (PLUMB-Bench, RSS 2027)
 
 Audit date: 2026-10-17. Scope: the related-work and comparison claims in `README.md`,
 `AFFORD-Bench_RSS'27/paper-template-latex/main.tex`, `references.bib`, and the figure
@@ -30,7 +30,7 @@ Note: the comparison figure is **not** included in `main.tex` (its only `\includ
 | **THE COLOSSEUM** | 20 RLBench tasks | Sim: 100 scripted motion-planner demos per task. Real: 5 per task (HTC Vive) [paper] | Multi-view RGB-D for the baselines. Resolution in sim UNVERIFIED (real Kinect-2 is 512×424) | 14: MO_Color, MO_Texture, MO_Size, RO_Color, RO_Texture, RO_Size, Light_Color, Table_Color, Table_Texture, Distractor, Background_Texture, Camera_Pose, **Object_Friction, Object_Mass** | **Y.** Friction sampled in [0.75, 1.0]. Mass ranges are task-dependent (Table III lists 5 tasks), and the axes apply only to tasks that support them | N | RLBench task-completion conditions | VoxPoser, R3M-MLP, MVP-MLP, PerAct, RVT (not VLAs) | UNVERIFIED | arXiv 2402.08191; RSS 2024 (DOI 10.15607/RSS.2024.XX.133) | High (factors), Medium (physics task coverage) |
 | **Factory** | Simulation methods + 60 part models, 3 assembly environments, 7 controllers [abstract] | None (RL) | n/a | Not a perturbation benchmark | n/a | Assets have defined clearances. Not a swept axis (UNVERIFIED detail) | Task-specific | Proof-of-concept RL for nut-and-bolt, **in simulation only** [abstract] | UNVERIFIED | arXiv 2205.03532; RSS 2022 | High |
 | **IndustReal** | Contact-rich pick, place, insertion | None (RL) | n/a | n/a | n/a | Not a swept axis (UNVERIFIED) | Task-specific | RL, sim-to-real on a real robot [abstract] | UNVERIFIED | arXiv 2305.17110; RSS 2023 | High |
-| *AFFORD-Bench (for reference)* | 210 tasks, 7 domains | 50 privileged-oracle demos per task, 10,500 planned (main.tex l.239) | 640×660 workcell + 300×420 wrist RGB, optional depth | L1 nominal scatter, L2 spatial, L3 light/colour, L4 friction [0.12, 0.25] + mass ×[1.8, 2.5], L5 compound | Y, on all tasks (`afford_pro/perturbations/engine.py` l.42-43) | **Fixed per-task tiers (2-2.5 mm / 8 mm). Tolerance-indexed variants are a Stage 2 deliverable** (main.tex Table caption l.185, H2 l.257-260) | Released, supported, at rest, within tolerance, after a ≥2 cm lift | Oracle, random, null only. BC/DP pending | **No LICENSE file in repo** | this repo | n/a |
+| *PLUMB-Bench (for reference)* | 210 tasks, 7 domains | 50 privileged-oracle demos per task, 10,500 planned (main.tex l.239) | 640×660 workcell + 300×420 wrist RGB, optional depth | L1 nominal scatter, L2 spatial, L3 light/colour, L4 friction [0.12, 0.25] + mass ×[1.8, 2.5], L5 compound | Y, on all tasks (`afford_pro/perturbations/engine.py` l.42-43) | **Fixed per-task tiers (2-2.5 mm / 8 mm). Tolerance-indexed variants are a Stage 2 deliverable** (main.tex Table caption l.185, H2 l.257-260) | Released, supported, at rest, within tolerance, after a ≥2 cm lift | Oracle, random, null only. BC/DP pending | **No LICENSE file in repo** | this repo | n/a |
 
 ### 1b. Other benchmarks a reviewer may raise (each exists; identifiers checked on arXiv)
 
@@ -171,7 +171,7 @@ Missing citations: **LIBERO-Plus** (closest prior work; also uses "L1-L5"), **Mu
 
 ---
 
-## 3. What AFFORD-Bench would need to show to claim a distinct contribution
+## 3. What PLUMB-Bench would need to show to claim a distinct contribution
 
 1. **Deliver tolerance indexing.** It is the stated differentiator, but main.tex says tolerance-indexed variants and H2 are Stage 2. ARNOLD and ManiSkill already use fixed per-task tolerances, and ManipulationNet sweeps clearance (3 → 0.02 mm) in the real world. The distinct claim needs simulated **success-vs-ε curves for learned policies** (ε ∈ {2, 4, 8, 16} mm at fixed shift), ideally crossed with L4.
 2. **Show L4 adds something COLOSSEUM does not.** COLOSSEUM already perturbs friction and mass, but only on a subset of tasks and with inconclusive results. AFFORD should show (a) L4 on all tasks, (b) a **feasibility reference for L4** (an adaptive oracle that solves most L4 episodes; today the oracle gets 47.3% and the paper says solvability is unknown), and (c) learned-policy degradation under L4 that is not predicted by L2/L3 degradation (different rankings or interaction effects).
@@ -183,7 +183,7 @@ Missing citations: **LIBERO-Plus** (closest prior work; also uses "L1-L5"), **Mu
 
 ## 4. Licences and reuse
 
-| Project | Licence (source) | Does AFFORD-Bench reuse it? |
+| Project | Licence (source) | Does PLUMB-Bench reuse it? |
 |---|---|---|
 | LIBERO | Code MIT; datasets CC BY 4.0 (GitHub README) | No code or data copied (no `import libero` anywhere). Only schema compatibility: HDF5 attribute and key names (`problem_info`, `ee_states`, `tag="libero-v1"`). Cite LIBERO (already done); no licence obligation for format compatibility |
 | LIBERO-PRO | MIT (`LICENSE`, copyright line from LIBERO); data CC-BY-4.0 (HF card) | No |
@@ -195,7 +195,7 @@ Missing citations: **LIBERO-Plus** (closest prior work; also uses "L1-L5"), **Mu
 Required before public release:
 1. Add `afford_pro/assets/robots/LICENSE` with the Apache-2.0 text, a note that the files derive from MuJoCo Menagerie `franka_emika_panda` (itself derived from `franka_ros` `franka_description`), and a statement that the scene XMLs modify `panda.xml` (Apache-2.0 §4(b)). Carry any upstream NOTICE file; I saw none in the folder listing (UNVERIFIED).
 2. Cite Menagerie in the paper. Official BibTeX: `@software{menagerie2022github, author={Zakka, Kevin and Tassa, Yuval and {MuJoCo Menagerie Contributors}}, title={{MuJoCo Menagerie: A collection of high-quality simulation models for MuJoCo}}, url={http://github.com/google-deepmind/mujoco_menagerie}, year={2022}}`.
-3. Add a top-level `LICENSE` for AFFORD-Bench itself (none exists), plus a separate data licence for the released HDF5 demos.
+3. Add a top-level `LICENSE` for PLUMB-Bench itself (none exists), plus a separate data licence for the released HDF5 demos.
 
 ---
 

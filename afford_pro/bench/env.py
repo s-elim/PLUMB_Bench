@@ -1,4 +1,4 @@
-"""Multi-goal Franka environment of AFFORD-Bench.
+"""Multi-goal Franka environment of PLUMB-Bench.
 
 The environment builds the scene of a TaskSpec, finds at start-up the resting pose of every goal and pre-placed start
 by dropping the bodies there (so goals are physically attainable and stable), samples a valid start layout at each

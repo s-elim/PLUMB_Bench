@@ -1,4 +1,4 @@
-"""Episode-level validation of AFFORD-Bench Robomimic HDF5 datasets.
+"""Episode-level validation of PLUMB-Bench Robomimic HDF5 datasets.
 
 Every episode in a file is checked; nothing is inferred from demo_0 alone. Errors make a file INVALID (it must not be
 used or skipped by the generator); warnings mark known limitations that a user of the data must be told about.

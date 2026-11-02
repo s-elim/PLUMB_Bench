@@ -22,5 +22,5 @@ changes, found by an element-wise diff of `industrial_assembly.xml`:
 Citation: Kevin Zakka, Yuval Tassa, and MuJoCo Menagerie Contributors. MuJoCo Menagerie: A collection of
 high-quality simulation models for MuJoCo, 2022.
 
-This notice covers only the robot meshes and model; the rest of AFFORD-Bench is MIT-licensed (top-level `LICENSE`).
+This notice covers only the robot meshes and model; the rest of PLUMB-Bench is MIT-licensed (top-level `LICENSE`).
 The origin of `assets/textures/cartoon_only.png` is not recorded.

@@ -1,4 +1,4 @@
-"""Paper figure: one AFFORD-Bench task per scene, rendered at its start and after the scripted oracle completed it
+"""Paper figure: one PLUMB-Bench task per scene, rendered at its start and after the scripted oracle completed it
 (arm returned to its ready posture so it does not hide the result), with the task's instruction. Episodes come from
 the evaluation seed block; the first episode the oracle completes is shown.
 

@@ -1,4 +1,4 @@
-"""Evaluate policies or oracles on AFFORD-Bench Paired Base/Dynamic Suites.
+"""Evaluate policies or oracles on PLUMB-Bench Paired Base/Dynamic Suites.
 
 Executes matched counterfactual pairs (Base control vs. Dynamic intervention)
 with force & torque safety verification.
@@ -97,7 +97,7 @@ def main() -> None:
         cases = cases[: args.max_cases]
 
     print("=" * 80)
-    print(f"AFFORD-Bench Paired Base/Dynamic Evaluation Suite")
+    print(f"PLUMB-Bench Paired Base/Dynamic Evaluation Suite")
     print(f"Total Paired Cases: {len(cases)} ({len(cases)*2} total rollouts)")
     print(f"Tasks: {len(task_ids)} | Seeds: {len(seeds)} | Directions: {directions}")
     print(f"Trigger: {args.trigger}")
@@ -140,7 +140,7 @@ def main() -> None:
     for k, v in summary["percentages"].items():
         print(f"  {k:<28}: {v:.1f}% ({summary['outcomes'][k]} pairs)")
     print("-" * 80)
-    print("Force & Contact Sensing Telemetry (AFFORD-Bench Advantage):")
+    print("Force & Contact Sensing Telemetry (PLUMB-Bench Advantage):")
     fs = summary["force_and_safety"]
     print(f"  Dynamic Force Violations (>150N):  {fs['dynamic_force_violation_count']} ({fs['dynamic_force_violation_rate']*100:.1f}%)")
     print(f"  Dynamic Torque Saturations:        {fs['dynamic_torque_saturation_count']} ({fs['dynamic_torque_saturation_rate']*100:.1f}%)")

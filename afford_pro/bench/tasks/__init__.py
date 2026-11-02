@@ -1,4 +1,4 @@
-"""The 210 AFFORD-Bench tasks and their static consistency checks.
+"""The 210 PLUMB-Bench tasks and their static consistency checks.
 
 Each task replaces the legacy task with the same number. `static_problems()` lists every way a specification can be
 inconsistent with its scene without simulating it; the runtime checks (attainable goals, valid starts, oracle success)

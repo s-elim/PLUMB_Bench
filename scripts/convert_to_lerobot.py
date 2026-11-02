@@ -1,4 +1,4 @@
-"""Convert AFFORD-Bench Robomimic HDF5 demonstrations to LeRobot v2.0 datasets (one dataset per HDF5 file).
+"""Convert PLUMB-Bench Robomimic HDF5 demonstrations to LeRobot v2.0 datasets (one dataset per HDF5 file).
 
 Images are stored losslessly as PNG inside the parquet files (LeRobot feature dtype "image"), so the
 conversion round-trips exactly (see tests/test_converters.py).

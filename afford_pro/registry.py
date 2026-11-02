@@ -1,4 +1,4 @@
-"""Task registry: AFFORD-Bench tasks (afford_pro.bench) and the deprecated legacy single-body task set."""
+"""Task registry: PLUMB-Bench tasks (afford_pro.bench) and the deprecated legacy single-body task set."""
 from __future__ import annotations
 
 import warnings
@@ -135,7 +135,7 @@ if "frontier_overhang_and_grasp_plate" in _TASK_REGISTRY:
     _TASK_REGISTRY["nonprehensile_push_and_grasp"] = _TASK_REGISTRY["frontier_overhang_and_grasp_plate"]
 
 
-# Task sets: "bench" is AFFORD-Bench (afford_pro/bench), whose instructions and success checks agree. "legacy" is
+# Task sets: "bench" is PLUMB-Bench (afford_pro/bench), whose instructions and success checks agree. "legacy" is
 # the deprecated single-body task set, kept only to load and replay its files. make(), get_oracle() and
 # get_task_entry() take `task_set`.
 TASK_SETS = ("bench", "legacy")
@@ -181,12 +181,12 @@ def get_task_entry(task_id: str, task_set: str = DEFAULT_TASK_SET) -> TaskEntry:
     if _check_task_set(task_set) == "bench":
         return _bench_entry(task_id)
     if task_id not in _TASK_REGISTRY:
-        raise KeyError(f"Task '{task_id}' not found in the AFFORD-Bench registry ({len(_TASK_REGISTRY)} tasks).")
+        raise KeyError(f"Task '{task_id}' not found in the PLUMB-Bench registry ({len(_TASK_REGISTRY)} tasks).")
     return _TASK_REGISTRY[task_id]
 
 
 def make(task_id: str, task_set: str = DEFAULT_TASK_SET, **kwargs) -> BaseFrankaEnv:
-    """Instantiate an AFFORD-Bench environment by task ID (`task_set="legacy"`: the deprecated single-body tasks)."""
+    """Instantiate a PLUMB-Bench environment by task ID (`task_set="legacy"`: the deprecated single-body tasks)."""
     if _check_task_set(task_set) == "legacy":
         warnings.warn("the legacy task set is deprecated; it is kept only to load and replay its files",
                       DeprecationWarning, stacklevel=2)

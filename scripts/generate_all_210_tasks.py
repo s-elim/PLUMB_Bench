@@ -1,4 +1,4 @@
-"""Batch oracle demonstration generator for all 210 AFFORD-Bench tasks (Robomimic HDF5).
+"""Batch oracle demonstration generator for all 210 PLUMB-Bench tasks (Robomimic HDF5).
 
 Forwarding wrapper for scripts/generate_all_150_tasks.py (which covers all 210 core benchmark
 tasks across domains D1 through D7, plus optional Domain 8 frontier extension tasks).

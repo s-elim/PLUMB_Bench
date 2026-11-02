@@ -1,6 +1,6 @@
-"""Augment existing AFFORD-Bench HDF5 demonstration files with actuator motor torques and contact forces.
+"""Augment existing PLUMB-Bench HDF5 demonstration files with actuator motor torques and contact forces.
 
-Because AFFORD-Bench demonstrations store deterministic initial states `states[0]`, reset seeds,
+Because PLUMB-Bench demonstrations store deterministic initial states `states[0]`, reset seeds,
 and executed actions `actions`, this script deterministically replays each episode through the MuJoCo
 physics environment and computes:
   - obs/joint_torques: (T, 7) float64 - actuator motor torques tau_act (N*m) on the 7 arm joints

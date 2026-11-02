@@ -1,4 +1,4 @@
-"""Runtime validation of the AFFORD-Bench tasks against the T9 acceptance gate (docs/roadmap/ROADMAP.md).
+"""Runtime validation of the PLUMB-Bench tasks against the T9 acceptance gate (docs/roadmap/ROADMAP.md).
 
 For each task: build the environment (every goal and pre-placed start is dropped into place and must come to rest),
 reset it --resets times (start variability of every moved body, start fallbacks, goals already true at reset), and run

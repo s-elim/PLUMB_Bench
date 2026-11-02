@@ -50,8 +50,9 @@ intervals per suite.
 Copy each `results/<method>_seed<k>/` folder (with `episodes.csv` and `summary.json`) into
 `docs/roadmap/evidence/leaderboard_<YYYY-MM-DD>/`, then:
 ```bash
-python scripts/build_site_data.py      # rebuilds docs/site/data.js; seeds of one method become one row
+python scripts/build_site_data.py      # aggregates the evidence into docs/site/data.js; seeds of one method become one row
 ```
 Runs of the same method are grouped by the policy name in `episodes.csv` (e.g. `bc_visual`), reported as pooled
-success with a task-bootstrap interval and the mean and s.d. over training seeds. Add a description for new
-methods to `POLICY` in `docs/site/app.js`.
+success with a task-bootstrap interval and the mean and s.d. over training seeds. The earlier leaderboard page
+(`docs/site/`) was removed on 2026-11-02; the project page (`docs/index.html`) gets a results section from these
+aggregates once reference policies have been evaluated.

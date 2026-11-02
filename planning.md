@@ -1,4 +1,4 @@
-# AFFORD-Bench: Master Strategic Roadmap & Reviewer Action Plan
+# PLUMB-Bench: Master Strategic Roadmap & Reviewer Action Plan
 
 > **Superseded 2026-10-17.** The current plan, status, and evidence are in `docs/roadmap/` (`ROADMAP.md`,
 > `PROGRESS.md`, `AUDIT_REPORT.md`, `CLAIM_EVIDENCE_LEDGER.md`). Several items marked done below do not hold:
@@ -8,7 +8,7 @@
 
 **Target Conference**: Robotics: Science and Systems (RSS) 2027 (Athens, Greece)  
 **Track**: Two-Stage Shepherding Process (Stage 1 Extended Abstract $\rightarrow$ Stage 2 Extension Charter)  
-**Paper Title**: *AFFORD-Bench: An Affordance-Grounded Benchmark and Generalization Evaluation for Robot Learning*  
+**Paper Title**: *PLUMB-Bench: A Physically Verified Benchmark for Precise, Generalizable Robot Manipulation*  
 **Paper ID**: `[RSS-2027-0150]` (Anonymized)
 
 ---
@@ -137,20 +137,20 @@ python scripts/evaluate_ood.py --checkpoint checkpoints/bc_state_industrial_best
 
 ## 5. Summary of Benchmark Assets & Verified Files
 
-- **Core Package**: [`afford_pro/`](file:///D:/Selim%20Sarowar/Cursor_Projects/AFFORD-Bench/afford_pro) (Gymnasium envs, MuJoCo C++, 210 task definitions, perturbation engine).
-- **HDF5 Datasets**: [`datasets/*.hdf5`](file:///D:/Selim%20Sarowar/Cursor_Projects/AFFORD-Bench/datasets) (210 tasks $\times$ 50 demos = 10,500 demos, 2,296,400 steps, ~387 GB).
-- **Paper LaTeX Source**: [`AFFORD-Bench_RSS'27/paper-template-latex/main.tex`](file:///D:/Selim%20Sarowar/Cursor_Projects/AFFORD-Bench/AFFORD-Bench_RSS'27/paper-template-latex/main.tex).
-- **Compiled Paper PDF**: [`AFFORD-Bench_RSS'27/paper-template-latex/main.pdf`](file:///D:/Selim%20Sarowar/Cursor_Projects/AFFORD-Bench/AFFORD-Bench_RSS'27/paper-template-latex/main.pdf) (Strict 6 pages, 0 overfull boxes).
-- **Interactive Project Website**: [`docs/index.html`](file:///D:/Selim%20Sarowar/Cursor_Projects/AFFORD-Bench/docs/index.html).
-- **Showcase Videos**: [`docs/videos/*.mp4`](file:///D:/Selim%20Sarowar/Cursor_Projects/AFFORD-Bench/docs/videos) (7 domain video demos).
-- **Master README**: [`README.md`](file:///D:/Selim%20Sarowar/Cursor_Projects/AFFORD-Bench/README.md).
+- **Core Package**: [`afford_pro/`](file:///D:/Selim%20Sarowar/Cursor_Projects/PLUMB-Bench/afford_pro) (Gymnasium envs, MuJoCo C++, 210 task definitions, perturbation engine).
+- **HDF5 Datasets**: [`datasets/*.hdf5`](file:///D:/Selim%20Sarowar/Cursor_Projects/PLUMB-Bench/datasets) (210 tasks $\times$ 50 demos = 10,500 demos, 2,296,400 steps, ~387 GB).
+- **Paper LaTeX Source**: [`AFFORD-Bench_RSS'27/paper-template-latex/main.tex`](file:///D:/Selim%20Sarowar/Cursor_Projects/PLUMB-Bench/AFFORD-Bench_RSS'27/paper-template-latex/main.tex).
+- **Compiled Paper PDF**: [`AFFORD-Bench_RSS'27/paper-template-latex/main.pdf`](file:///D:/Selim%20Sarowar/Cursor_Projects/PLUMB-Bench/AFFORD-Bench_RSS'27/paper-template-latex/main.pdf) (Strict 6 pages, 0 overfull boxes).
+- **Interactive Project Website**: [`docs/index.html`](file:///D:/Selim%20Sarowar/Cursor_Projects/PLUMB-Bench/docs/index.html).
+- **Showcase Videos**: [`docs/videos/*.mp4`](file:///D:/Selim%20Sarowar/Cursor_Projects/PLUMB-Bench/docs/videos) (7 domain video demos).
+- **Master README**: [`README.md`](file:///D:/Selim%20Sarowar/Cursor_Projects/PLUMB-Bench/README.md).
 - **Remote Git Repository**: `https://github.com/s-elim/AFFORD_Bench.git` (`main`).
 
 ---
 
 ## 6. Frontier Complex Manipulation Task Architectures (Stage 2 Expansion Roadmap)
 
-To establish AFFORD-Bench as the definitive reality check for Vision-Language-Action (VLA) foundation models and visuomotor diffusion chunking, four frontier manipulation archetypes are formalized for the Stage 2 Extension Charter:
+To establish PLUMB-Bench as the definitive reality check for Vision-Language-Action (VLA) foundation models and visuomotor diffusion chunking, four frontier manipulation archetypes are formalized for the Stage 2 Extension Charter:
 
 ### 6.1 Tool-Mediated Manipulation (Indirect Affordances)
 - **L-Hook Distal Retrieval**: The target object (gear or vial) is placed beyond direct kinematic reach ($x = 0.85\,\text{m}$). The arm grasps an L-shaped hook tool, hooks the interior profile, pulls it into the reachable workspace, and then re-grasps the object.

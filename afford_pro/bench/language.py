@@ -1,4 +1,4 @@
-"""Language for AFFORD-Bench: noun phrases for every scene entity and a step-by-step instruction derived from a
+"""Language for PLUMB-Bench: noun phrases for every scene entity and a step-by-step instruction derived from a
 task's goals, so the paraphrase states exactly what the success check requires (a LIBERO-PRO-style instruction
 variant). The canonical instruction stays the hand-written `TaskSpec.instruction`.
 """

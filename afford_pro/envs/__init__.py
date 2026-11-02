@@ -1,1 +1,1 @@
-"""AFFORD-Bench envs subpackage."""
+"""PLUMB-Bench envs subpackage."""

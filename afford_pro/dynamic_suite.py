@@ -1,4 +1,4 @@
-"""Paired Base/Dynamic Evaluation Suite for AFFORD-Bench (Domains 1-7).
+"""Paired Base/Dynamic Evaluation Suite for PLUMB-Bench (Domains 1-7).
 
 Inspired by the counterfactual matched-pair paradigm of LIBERO-MAX, but extended
 with physical force and actuator torque sensing:
@@ -7,7 +7,7 @@ with physical force and actuator torque sensing:
    a_{0:t*} are strictly matched between Base and Dynamic arms.
 3. At trigger point t*, an exogenous object displacement Δx is injected into the
    manipulated workpiece.
-4. Uniquely in AFFORD-Bench: Tracks 7-D actuator motor torques τ_{act} and 3-D contact
+4. Uniquely in PLUMB-Bench: Tracks 7-D actuator motor torques τ_{act} and 3-D contact
    forces F_{contact}. Distinguishes mere geometric task completion from Compliant
    Success (safety envelope F_{max} <= 150 N, τ_{act} <= τ_{max}).
 """

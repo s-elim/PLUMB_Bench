@@ -1,4 +1,4 @@
-"""Train BC or diffusion-policy baselines on AFFORD-Bench Robomimic HDF5 datasets.
+"""Train BC or diffusion-policy baselines on PLUMB-Bench Robomimic HDF5 datasets.
 
 Modalities (afford_pro.learning.features): `lowdim` = proprioception + pose of the evaluated body (the low-dim
 baseline), `visual` = workcell image + proprioception, `state` = proprioception only (a blind ablation: it cannot

@@ -1,4 +1,4 @@
-"""Dataset Integrity Verification Script for AFFORD-Bench.
+"""Dataset Integrity Verification Script for PLUMB-Bench.
 
 Performs comprehensive schema and physical signal validation across all generated HDF5 dataset files:
 1. Verifies 50 demonstrations per task across all 150 tasks.
@@ -196,7 +196,7 @@ def verify_file(hdf5_path: Path, expected_demos: int = 50) -> dict:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Verify AFFORD-Bench dataset integrity.")
+    parser = argparse.ArgumentParser(description="Verify PLUMB-Bench dataset integrity.")
     parser.add_argument("--data-dir", type=str, default="datasets")
     parser.add_argument("--expected-demos", type=int, default=50)
     parser.add_argument("--verbose", action="store_true")
@@ -211,7 +211,7 @@ def main():
     all_tasks = afford_pro.list_tasks("legacy")
 
     print("\n" + "=" * 80, flush=True)
-    print(" AFFORD-Bench DATASET INTEGRITY & PROTOCOL VERIFICATION", flush=True)
+    print(" PLUMB-Bench DATASET INTEGRITY & PROTOCOL VERIFICATION", flush=True)
     print(f" Target Task Registry : {len(all_tasks)} registered tasks", flush=True)
     print(f" Found HDF5 Files     : {len(hdf5_files)} dataset files", flush=True)
     print(f" Expected Demos/Task  : {args.expected_demos}", flush=True)

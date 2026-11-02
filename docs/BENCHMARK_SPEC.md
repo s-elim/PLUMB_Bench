@@ -1,7 +1,7 @@
-# AFFORD-Bench Specification: Dynamic Robustness & Force Compliance
+# PLUMB-Bench Specification: Dynamic Robustness & Force Compliance
 
 **Status**: Released Benchmark Specification, Version 1.0.0.  
-This document specifies the evaluation tracks, matched-pair counterfactual protocol, force-torque safety constraints, and statistical reporting standards for **AFFORD-Bench**.
+This document specifies the evaluation tracks, matched-pair counterfactual protocol, force-torque safety constraints, and statistical reporting standards for **PLUMB-Bench**.
 
 ---
 
@@ -45,7 +45,7 @@ $$\text{Dynamic (Intervention):} \quad \mathbf{s}_0 \xrightarrow{a_{0:t^*}} \mat
 
 A critical limitation of kinematic-only benchmarks (such as LIBERO-MAX) is that they evaluate policies purely on visual and geometric completion: if an arm drives an object into a fixture with infinite force or binds an insertion peg with saturating torques, kinematic simulators score it as a "success".
 
-AFFORD-Bench measures **Compliant Dynamic Robustness**:
+PLUMB-Bench measures **Compliant Dynamic Robustness**:
 
 $$\mathbf{S}_{\text{compliant}} = \mathbf{S}_{\text{dynamic}} \;\land\; (F_{\max} \le 150\,\text{N}) \;\land\; (\forall j, |\tau_j| \le \tau_{\max, j})$$
 
@@ -98,7 +98,7 @@ For every evaluated policy, benchmark reports must provide:
 
 ## 6. Comparison with Existing Manipulation Benchmarks
 
-| Dimension | LIBERO / LIBERO-PRO | LIBERO-MAX | Robomimic | AFFORD-Bench |
+| Dimension | LIBERO / LIBERO-PRO | LIBERO-MAX | Robomimic | PLUMB-Bench |
 | :--- | :---: | :---: | :---: | :---: |
 | **Task Scope** | 130 static tasks | 8,000 paired shifts | 6 environments | **240 physical tasks (D1–D8)** |
 | **Evaluation Mode** | Static ($t=0$) | Dynamic ($t^*$) | Static ($t=0$) | **Both Static (L1–L5) & Dynamic** |

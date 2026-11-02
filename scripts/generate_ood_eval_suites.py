@@ -1,4 +1,4 @@
-"""Out-of-Distribution (OOD) Evaluation Suite Generator for AFFORD-Bench.
+"""Out-of-Distribution (OOD) Evaluation Suite Generator for PLUMB-Bench.
 
 Generates standardized perturbed evaluation demonstration suites for offline benchmark
 evaluation, replay testing, and multi-modal distribution shift benchmarking.
@@ -30,7 +30,7 @@ from scripts.generate_all_150_tasks import generate_task_demos
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Generate OOD evaluation suites for AFFORD-Bench.")
+    parser = argparse.ArgumentParser(description="Generate OOD evaluation suites for PLUMB-Bench.")
     parser.add_argument(
         "--domain",
         type=str,
@@ -77,7 +77,7 @@ def main():
     out_base = ROOT / args.output_dir
 
     print("\n" + "=" * 80, flush=True)
-    print(" AFFORD-Bench: OOD EVALUATION SUITE GENERATOR", flush=True)
+    print(" PLUMB-Bench: OOD EVALUATION SUITE GENERATOR", flush=True)
     print(f" Target Domain       : {args.domain.upper()}", flush=True)
     print(f" Tasks In Scope      : {len(selected_tasks)} tasks", flush=True)
     print(f" Perturbation Splits : {', '.join(perturbation_list)}", flush=True)

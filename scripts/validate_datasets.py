@@ -1,4 +1,4 @@
-"""Validate every episode of every AFFORD-Bench dataset file and write machine- and human-readable reports.
+"""Validate every episode of every PLUMB-Bench dataset file and write machine- and human-readable reports.
 
 Usage:
   python scripts/validate_datasets.py --out-dir docs/roadmap/evidence/dataset_validation

@@ -1,4 +1,4 @@
-"""Generate deterministic benchmark manifests for AFFORD-Bench (Full and Lite tracks).
+"""Generate deterministic benchmark manifests for PLUMB-Bench (Full and Lite tracks).
 
 Outputs:
   - benchmark/manifests/afford_bench_full.json
@@ -202,9 +202,9 @@ def main() -> None:
 
     # 5. Write Lite README
     readme_path = LITE_DIR / "README.md"
-    readme_content = f"""# AFFORD-Bench Lite Benchmark Track
+    readme_content = f"""# PLUMB-Bench Lite Benchmark Track
 
-**AFFORD-Bench Lite** is a frozen, deterministic subset of AFFORD-Bench designed for rapid policy iteration, hyperparameter tuning, and CI testing.
+**PLUMB-Bench Lite** is a frozen, deterministic subset of PLUMB-Bench designed for rapid policy iteration, hyperparameter tuning, and CI testing.
 
 ## Specification
 

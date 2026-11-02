@@ -86,9 +86,37 @@ server. Session 1 header (2026-10-17): no learned-policy results; L4 range uncal
   is sourced (LITERATURE_COMPARISON.md, the LIBERO-MAX repo README, Meta-World code checked 2026-11-02, main.tex);
   no value from the quarantined `benchmark_comparison.png` is reused. Script: `figures/src/make_compare_figure.py`
   (bar version kept as `make_compare_figure_bars.py`). The paper folder stays local (gitignored).
-- **Open: page limit.** Body text now runs about 22 lines onto page 6 (it was about 10 before, the Conclusion);
-  Stage 1 allows 5 content pages. Trim Related Work Sec. II-B (now covered by Fig. 2) and tighten prose, or drop
-  figure rows.
+- Page limit fixed (user request): body text ran about 26 lines onto page 6. Related Work (Sec. II-B is now covered
+  by Fig. 2), the Introduction's repeats of the abstract, the contribution bullets, and the Conclusion were tightened;
+  no number or claim was dropped from Secs. III-IV. Content now ends on page 5, references fill page 6, no overfull
+  boxes, all fonts Type 1. Page 5 has little slack: any addition needs an equal cut. Pre-trim text:
+  `main.tex.bak_before_trim`.
+- Renamed (user request, 2026-11-02): the benchmark is now **PLUMB-Bench**; paper title "PLUMB-Bench: A Physically Verified
+  Benchmark for Precise, Generalizable Robot Manipulation" (two title lines; content still ends on page 5). The name
+  was changed in prose only: paper and Fig. 2, README, CITATION, LICENSE holder, project page and its wordmark (now a
+  plumb bob), docs, schema titles, docstrings and printed messages. Kept on purpose: manifest `benchmark_id` and its
+  schema `const`, scene-XML comments (scene files are recorded in datasets), pip name `afford-bench`, package
+  `afford_pro`, repo URL, dated records (evidence, reviews, audits, quarantine, backups) and earlier entries of this
+  file. Paper backups: `backup_before_rename_2026-11-02/`. Tests touching the renamed modules: 698 passed.
+- Project page and README rewritten to match the paper (user request; A-43 and A-47 closed for these two files):
+  every number is from the paper / `figures/src/numbers.json`, the five paper figures are rendered to
+  `docs/assets/figures/paper/`, and the social-preview image `docs/assets/og.png` is rebuilt from the teaser. Removed
+  from the page: the policy leaderboard and the "56.2%" / "78.4%" claims (no learned policy has been evaluated), the
+  240-task / 960-pair / 150 N / torque "compliant success" framing, the LIBERO-MAX banner (old og.png) and its event
+  GIFs, and the legacy-task videos. CITATION.bib is now `@misc` (no venue before acceptance). Every quick-start
+  command was run on a scratch copy (make, oracle on six suites, events probe, generation, validation, RLDS and
+  LeRobot export).
+- Repositories (2026-11-02): this repository (formerly s-elim/AFFORD_Bench) is now s-elim/PLUMB_Bench, with its
+  page at s-elim.github.io/PLUMB_Bench (root `index.html` redirects to `docs/`). The authors also keep
+  Physical-Super-Intelligence/PLUMB_Bench, whose history was rewritten and whose page is served from the root; both
+  carry the same page, README, and evidence.
+- At the authors' request, removed 52 unused files: the old figures in `docs/assets/figures/` (including the
+  LIBERO-MAX figures and `performance_gap.svg` with unmeasured policy numbers), the LIBERO-MAX event GIFs in
+  `docs/assets/media/`, logos of unaffiliated institutions, the old leaderboard page `docs/site/`, the legacy-task
+  videos `docs/videos/`, and `docs/images/`. All are recoverable from git history; their generators
+  (`scripts/build_site_data.py`, `scripts/export_project_videos.py`, `scripts/generate_paper_figures.py`) are kept.
+  README redesigned (centred header, key numbers, figures, collapsible sections).
+- Open: `docs/BENCHMARK_SPEC.md` still has the old framing (A-43, A-47).
 
 ## Decisions required from the authors
 - D9 Generate `datasets/` for the benchmark (210 tasks x 50 demos with images), deferred. Estimate from the

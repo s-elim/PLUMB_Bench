@@ -1,4 +1,4 @@
-"""Tests for actuator motor torques (tau_act) and contact force channels in AFFORD-Bench."""
+"""Tests for actuator motor torques (tau_act) and contact force channels in PLUMB-Bench."""
 from __future__ import annotations
 
 import tempfile

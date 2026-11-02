@@ -1,4 +1,4 @@
-"""AFFORD-Bench tasks: the 210 tasks, built so that every instruction names simulated objects and every success check
+"""PLUMB-Bench tasks: the 210 tasks, built so that every instruction names simulated objects and every success check
 covers the whole instruction (docs/roadmap/T9_TASK_REDESIGN.md).
 
     import afford_pro
@@ -20,7 +20,7 @@ def get_spec(task: str | int):
             raise KeyError(f"no task number {number}")
         return TASK_BY_NUMBER[number]
     if task not in TASK_MAP:
-        raise KeyError(f"Task '{task}' not found among the AFFORD-Bench tasks ({len(TASK_MAP)} tasks).")
+        raise KeyError(f"Task '{task}' not found among the PLUMB-Bench tasks ({len(TASK_MAP)} tasks).")
     return TASK_MAP[task]
 
 

@@ -1,4 +1,4 @@
-# AFFORD-Bench demonstrations: dataset card
+# PLUMB-Bench demonstrations: dataset card
 
 Status: generated with `scripts/generate_all_150_tasks.py`; not yet hosted for download. Licence: MIT (top-level
 `LICENSE`); robot meshes Apache-2.0.

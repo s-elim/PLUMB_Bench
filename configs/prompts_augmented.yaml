@@ -1,4 +1,4 @@
-# AFFORD-Bench multi-tier language prompts for all 210 tasks.
+# PLUMB-Bench multi-tier language prompts for all 210 tasks.
 #
 # Generated 2026-10-08 from afford_pro/task_definitions.py (ALL_210_TASKS) plus
 # hand-written prompt text. tests/test_prompts_augmented.py checks this file

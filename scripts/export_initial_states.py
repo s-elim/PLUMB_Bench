@@ -1,4 +1,4 @@
-"""Export fixed initial simulator states per task across AFFORD-Bench.
+"""Export fixed initial simulator states per task across PLUMB-Bench.
 
 Similar to LIBERO's fixed initial states, this eliminates RNG variance during benchmark
 evaluation: policies are initialized directly into pre-settled physical states.
@@ -65,7 +65,7 @@ def export_task_initial_states(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Export fixed initial simulator states for AFFORD-Bench tasks.")
+    parser = argparse.ArgumentParser(description="Export fixed initial simulator states for PLUMB-Bench tasks.")
     parser.add_argument("--domain", type=str, default="all",
                         choices=["all", "industrial", "kitchen", "tabletop", "lab", "long_horizon", "chain_precision", "chain_service", "frontier"])
     parser.add_argument("--task", type=str, default=None, help="Export for a single task ID")
@@ -96,7 +96,7 @@ def main():
         selected_tasks = [t for t in all_tasks if target_dom in afford_pro.get_task_entry(t, "legacy").domain]
 
     print("\n" + "=" * 80)
-    print(f" AFFORD-Bench: INITIAL SIMULATOR STATE EXPORTER")
+    print(f" PLUMB-Bench: INITIAL SIMULATOR STATE EXPORTER")
     print(f" Target Tasks       : {len(selected_tasks)} tasks")
     print(f" States Per Task    : {args.num_states}")
     print(f" Output Directory   : {out_dir}")

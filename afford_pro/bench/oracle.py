@@ -1,4 +1,4 @@
-"""Privileged scripted expert for AFFORD-Bench: achieves the goals of a task in order.
+"""Privileged scripted expert for PLUMB-Bench: achieves the goals of a task in order.
 
 Each goal maps to a primitive: On -> the grasp-carry-place routine of ParametricOracle on the focused body (with up to three attempts),
 Lifted -> grasp and lift, Pressed -> push a button cap down past its latch, Closed -> push a slider face along its

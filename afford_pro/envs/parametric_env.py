@@ -1,4 +1,4 @@
-"""Parametric Franka environment shared by all 210 AFFORD-Bench tasks."""
+"""Parametric Franka environment shared by all 210 PLUMB-Bench tasks."""
 from __future__ import annotations
 
 from pathlib import Path

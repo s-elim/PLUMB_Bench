@@ -1,4 +1,4 @@
-"""Unit tests for AFFORD-Bench Paired Base/Dynamic Evaluation Suite and Force Safety."""
+"""Unit tests for PLUMB-Bench Paired Base/Dynamic Evaluation Suite and Force Safety."""
 from __future__ import annotations
 
 import sys

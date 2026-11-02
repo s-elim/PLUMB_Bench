@@ -1,4 +1,4 @@
-# T9: every task valid end to end (AFFORD-Bench tasks)
+# T9: every task valid end to end (PLUMB-Bench tasks)
 
 Goal (authors, 2026-10-18): all 210 tasks accurate in the sense of LIBERO / LIBERO-PRO / LIBERO-Plus / LIBERO-X: the
 instruction names simulated objects, the goal is a conjunction of predicates over them, and the success check covers

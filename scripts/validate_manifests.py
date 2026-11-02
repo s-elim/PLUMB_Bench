@@ -1,4 +1,4 @@
-"""Validate AFFORD-Bench benchmark manifests against JSON schemas and runtime invariants."""
+"""Validate PLUMB-Bench benchmark manifests against JSON schemas and runtime invariants."""
 from __future__ import annotations
 
 import json
@@ -34,7 +34,7 @@ def main() -> None:
     ]
 
     print("=" * 80)
-    print("AFFORD-Bench Manifest Schema Validation")
+    print("PLUMB-Bench Manifest Schema Validation")
     print("=" * 80)
 
     total_errors = 0

@@ -1,4 +1,4 @@
-# AFFORD-Bench roadmap to an RSS 2027 submission
+# PLUMB-Bench roadmap to an RSS 2027 submission
 
 Deadline: Stage 1 extended abstract, 4 December 2026 (AoE). Today: 2026-10-17 (48 days).
 Goal: a benchmark whose validated task inventory, dataset, evaluation protocol, and paper agree, and whose every

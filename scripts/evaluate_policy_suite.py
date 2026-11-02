@@ -1,4 +1,4 @@
-"""Evaluate a policy on AFFORD-Bench suites with the protocol's seeds, horizon, and uncertainty reporting.
+"""Evaluate a policy on PLUMB-Bench suites with the protocol's seeds, horizon, and uncertainty reporting.
 
 Episode seeds are `--seed-base + 1000 * task_number + j` (j < --episodes). Within each task they are disjoint from
 the generation seeds (`42 + 1000 * task_number + k`, k < 400); numerically equal seeds of different tasks give

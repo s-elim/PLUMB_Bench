@@ -1,4 +1,4 @@
-"""Scene registry for AFFORD-Bench: free bodies with their home starts, named target points, and mechanisms.
+"""Scene registry for PLUMB-Bench: free bodies with their home starts, named target points, and mechanisms.
 
 Target points are world positions of receptacles and marked squares; the environment drops a body there at start-up
 to find its resting pose, so a target only needs the right x, y and a z at which the body, held upright, is above the

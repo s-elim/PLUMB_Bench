@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://afford-bench.org/schemas/scenario.schema.json",
-  "title": "AFFORD-Bench Dynamic Scenario Record",
+  "title": "PLUMB-Bench Dynamic Scenario Record",
   "type": "object",
   "additionalProperties": false,
   "required": [

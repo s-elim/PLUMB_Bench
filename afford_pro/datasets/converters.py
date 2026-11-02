@@ -1,4 +1,4 @@
-"""Conversion between AFFORD-Bench Robomimic HDF5 datasets, LeRobot v2.0 datasets, and RLDS episodes.
+"""Conversion between PLUMB-Bench Robomimic HDF5 datasets, LeRobot v2.0 datasets, and RLDS episodes.
 
 Robomimic HDF5 (written by `RobomimicHDF5Writer`):
     data/demo_i/actions (T, 7) float32, data/demo_i/obs/<key> (T, ...), data/demo_i/rewards (T,),

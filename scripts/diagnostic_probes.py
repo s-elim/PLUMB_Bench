@@ -1,4 +1,4 @@
-"""Diagnostic probes of the AFFORD-Bench tasks with the privileged oracle (benchmark analysis, Sec. VI of the paper).
+"""Diagnostic probes of the PLUMB-Bench tasks with the privileged oracle (benchmark analysis, Sec. VI of the paper).
 
 Probes over all 210 tasks, with seed blocks disjoint from data generation, task validation and evaluation (the
 blocks of different probes may share seed values only on different tasks):

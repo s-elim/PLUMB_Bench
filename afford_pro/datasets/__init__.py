@@ -1,1 +1,1 @@
-"""AFFORD-Bench datasets subpackage."""
+"""PLUMB-Bench datasets subpackage."""

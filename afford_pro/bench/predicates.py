@@ -1,4 +1,4 @@
-"""Goal predicates of AFFORD-Bench, evaluated on the current simulator state of a GoalFrankaEnv.
+"""Goal predicates of PLUMB-Bench, evaluated on the current simulator state of a GoalFrankaEnv.
 
 State predicates (On, Pressed, Closed, Opened, Lifted) are functions of the physics state, plus each body's start
 height and highest point since reset (On's lift requirement, Slid's no-lift requirement). Dwell predicates

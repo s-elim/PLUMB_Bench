@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://afford-bench.org/schemas/manifest.schema.json",
-  "title": "AFFORD-Bench Benchmark Manifest",
+  "title": "PLUMB-Bench Benchmark Manifest",
   "type": "object",
   "additionalProperties": false,
   "required": ["benchmark_id", "benchmark_version", "protocol", "cases"],

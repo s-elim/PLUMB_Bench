@@ -1,4 +1,4 @@
-"""Policy architectures for the AFFORD-Bench baselines (behavior cloning and a DDPM action-chunk diffusion policy).
+"""Policy architectures for the PLUMB-Bench baselines (behavior cloning and a DDPM action-chunk diffusion policy).
 
 `proprio_dim` is the length of the low-dim input vector (see afford_pro.learning.features.input_dim). Visual models
 also take a 3 x 80 x 80 workcell image. Both predict `chunk_size` future actions in [-1, 1].

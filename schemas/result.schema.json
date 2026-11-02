@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://afford-bench.org/schemas/result.schema.json",
-  "title": "AFFORD-Bench Evaluation Result",
+  "title": "PLUMB-Bench Evaluation Result",
   "type": "object",
   "additionalProperties": false,
   "required": [

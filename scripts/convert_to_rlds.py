@@ -1,4 +1,4 @@
-"""Convert AFFORD-Bench Robomimic HDF5 demonstrations to RLDS episodes for Open X-Embodiment pipelines.
+"""Convert PLUMB-Bench Robomimic HDF5 demonstrations to RLDS episodes for Open X-Embodiment pipelines.
 
 Each episode follows the RLDS / Open X-Embodiment step layout used by OpenVLA and Octo: observation
 (image, wrist_image, state = joint positions + gripper opening, and the remaining proprioception), action,
@@ -48,7 +48,7 @@ def build_tfds(paths: list[Path], data_dir: Path) -> None:
         return tfds.features.Tensor(shape=v.shape, dtype=np.float32)
 
     class AffordBenchRLDS(tfds.core.GeneratorBasedBuilder):
-        """AFFORD-Bench oracle demonstrations in RLDS format."""
+        """PLUMB-Bench oracle demonstrations in RLDS format."""
 
         VERSION = tfds.core.Version("1.0.0")
 

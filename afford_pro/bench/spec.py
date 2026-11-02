@@ -1,4 +1,4 @@
-"""AFFORD-Bench task specification.
+"""PLUMB-Bench task specification.
 
 A task is an instruction, a start configuration, and a conjunction of goal predicates over simulated bodies and
 mechanisms (as in LIBERO's BDDL goals). The episode succeeds at the first step at which every goal holds and every

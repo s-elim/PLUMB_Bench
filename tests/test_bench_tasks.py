@@ -1,4 +1,4 @@
-"""AFFORD-Bench tasks: the task specifications agree with their scenes, goals mean what their instructions say, the oracle
+"""PLUMB-Bench tasks: the task specifications agree with their scenes, goals mean what their instructions say, the oracle
 solves a task in every scene, and datasets are written, validated and replayed exactly."""
 from __future__ import annotations
 

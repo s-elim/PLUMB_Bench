@@ -1,4 +1,4 @@
-"""Generate the AFFORD-Bench scene XMLs: each source scene with its idle distractor bodies removed and the objects,
+"""Generate the PLUMB-Bench scene XMLs: each source scene with its idle distractor bodies removed and the objects,
 marked goal squares and mechanisms that the instructions name added (see docs/roadmap/T9_TASK_REDESIGN.md).
 
     python scripts/build_bench_scenes.py            # writes afford_pro/assets/<scene>_bench.xml

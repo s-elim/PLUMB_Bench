@@ -1,1 +1,1 @@
-"""AFFORD-Bench evaluation subpackage."""
+"""PLUMB-Bench evaluation subpackage."""

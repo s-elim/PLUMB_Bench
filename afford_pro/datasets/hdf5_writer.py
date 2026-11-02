@@ -12,7 +12,7 @@ Layout:
       dones: (T,) uint8
       states: (T, S) float64 full physics simulator state before actions[t]
       obs/
-        # Canonical AFFORD-Bench keys:
+        # Canonical PLUMB-Bench keys:
         agentic_rgb, wrist_rgb, joint_positions, joint_velocities, tcp_pose (7-D), gripper_width (1-D)
         # Canonical Robomimic / robosuite keys (aliased/derived):
         agentview_rgb, eye_in_hand_rgb, agentview_image, robot0_eye_in_hand_image,
@@ -78,7 +78,7 @@ def _quat_wxyz_to_axisangle(q_wxyz: np.ndarray) -> np.ndarray:
 
 
 def make_env_args(task_id: str, **env_kwargs: Any) -> str:
-    """robomimic environment metadata for an AFFORD-Bench task: `afford_pro.make(env_name, **env_kwargs)` rebuilds
+    """robomimic environment metadata for a PLUMB-Bench task: `afford_pro.make(env_name, **env_kwargs)` rebuilds
     the environment (robomimic itself cannot construct it; the entry lets its loaders read the dataset)."""
     return json.dumps({
         "env_name": task_id,

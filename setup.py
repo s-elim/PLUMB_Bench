@@ -21,7 +21,7 @@ setup(
     name="afford_pro",
     version="0.1.0",
     license="MIT",
-    description="AFFORD-Bench: benchmark, oracle dataset generator, and OOD evaluation suite for robot manipulation policies",
+    description="PLUMB-Bench: benchmark, oracle dataset generator, and OOD evaluation suite for robot manipulation policies",
     author="Selim Sarowar & Antigravity",
     packages=find_packages(include=["afford_pro", "afford_pro.*"]),
     package_data={"afford_pro": ["assets/*.xml", "assets/robots/assets/*", "assets/robots/LICENSE",

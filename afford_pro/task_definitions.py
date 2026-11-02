@@ -1,4 +1,4 @@
-"""Task definitions for the 210 AFFORD-Bench tasks."""
+"""Task definitions for the 210 PLUMB-Bench tasks."""
 from __future__ import annotations
 
 from dataclasses import dataclass

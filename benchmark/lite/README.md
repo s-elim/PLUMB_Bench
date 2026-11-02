@@ -1,6 +1,6 @@
-# AFFORD-Bench Lite Benchmark Track
+# PLUMB-Bench Lite Benchmark Track
 
-**AFFORD-Bench Lite** is a frozen, deterministic subset of AFFORD-Bench designed for rapid policy iteration, hyperparameter tuning, and CI testing.
+**PLUMB-Bench Lite** is a frozen, deterministic subset of PLUMB-Bench designed for rapid policy iteration, hyperparameter tuning, and CI testing.
 
 ## Specification
 
