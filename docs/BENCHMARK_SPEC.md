@@ -1,109 +1,168 @@
-# PLUMB-Bench Specification: Dynamic Robustness & Force Compliance
+# PLUMB-Bench Specification
 
-**Status**: Released Benchmark Specification, Version 1.0.0.  
-This document specifies the evaluation tracks, matched-pair counterfactual protocol, force-torque safety constraints, and statistical reporting standards for **PLUMB-Bench**.
+This document specifies the tasks, success checks, distribution shifts, mid-execution events, evaluation protocol,
+and data format of **PLUMB-Bench**, as described in the paper and implemented in `afford_pro` (MuJoCo 3.5.0). Every
+reference number below is taken from the evidence files in `docs/roadmap/evidence/`.
 
----
+## 1. Task and environment
 
-## 1. Evaluation Tracks
+A task is a tuple κ = (ℓ, e, G, ≺) of an instruction ℓ, an environment e = (W, O, ρ₀, Φ), goals G = (g₁, …, g_k),
+and a partial order ≺ on the goals. The environment consists of a workcell W, the objects and mechanisms O, an
+initial-state distribution ρ₀, and the sliding friction and masses Φ of the moved objects. Each task defines an MDP
+on a simulated Franka Panda.
 
-| Track | Matched Pairs | Total Scored Rollouts | Composition | Primary Use |
-| :--- | :---: | :---: | :--- | :--- |
-| **Full** | 960 | 1,920 | 240 tasks (D1–D8, 4 pairs/task) | Comprehensive policy benchmarking & archival reporting |
-| **Lite** | 96 | 192 | 24 tasks (3 per domain D1–D8, 4 pairs/task) | Rapid iteration, CI validation, hyperparameter sweeps |
+| Item | Specification |
+| :--- | :--- |
+| Action | (Δp, Δθ, a_grip) ∈ [−1, 1]⁷: a TCP increment of at most 2.5 cm per step, tracked at 20 Hz by damped-least-squares IK with gravity-compensated joint servos; a yaw increment with the hand pointing down; a per-finger opening of a force-limited parallel jaw (about 35 N per finger) |
+| Observations | workcell RGB (640×660), wrist RGB (300×420), optional metric depth, proprioception; a privileged low-dimensional view adds the poses of the moved bodies |
+| Dynamics | deterministic; randomness enters only through ρ₀ and the perturbation sampler, both seeded per episode |
+| Reward | sparse |
+| Step budget | H = 400 + 250 (k − 1), i.e. 400–1,650 steps |
+| API | `afford_pro.make(task_id)`; Gymnasium-style `reset(seed=...)` and `step(action)`; `env.language_instruction` |
 
-- **Frozen Manifests**:
-  - Full Track: [`benchmark/manifests/afford_bench_full.json`](../benchmark/manifests/afford_bench_full.json)
-  - Lite Track: [`benchmark/lite/afford_bench_lite.json`](../benchmark/lite/afford_bench_lite.json)
-  - Validation: verified against draft 2020-12 schemas in [`schemas/manifest.schema.json`](../schemas/manifest.schema.json).
-- **Lite Subset Contract**:
-  - Deterministically selected with seed `20261029`.
-  - Preserves exact domain proportions (3 tasks per domain across all 8 domains).
+## 2. Goal predicates and success
 
----
+Each goal is a predicate on the simulator state.
 
-## 2. Matched Base and Dynamic Counterfactual Protocol
+| Predicate | Holds when |
+| :--- | :--- |
+| `On(b, t)` | body b is released (no finger contact), supported by a non-robot body, at rest (‖v‖ < 0.02 m/s, ‖ω‖ < 0.2 rad/s), tilted at most ε_θ, has been lifted at least 2 cm, and rests within ε_xy of its goal pose at target t: a named point (a bore, a slot, a rack hole), a region (a bin, a marked square) that the footprint of b must lie inside, or another body (stacking) |
+| `Pressed(u)` | latching button u is past its latch depth |
+| `Closed(s)` | drawer or vise jaw s is within 4 mm of its end |
+| `Slid(b, t)` | body b was moved to t without being lifted more than 1 cm (wiping) |
+| `HeldOver(b, t, c)` | grasped body b is held with clearance c above t |
+| `GripperAbove`, `Touching` | a hover or a touch held for consecutive steps |
+| `Lifted(b, h)` | grasped body b is raised by h |
 
-Every evaluation case defines two paired arms sharing the same random seed, initial simulator state $\mathbf{s}_0$, language instruction, and executed action prefix $a_{0:t^*}$:
+**Ordering.** A goal counts as reached only when it becomes true after every goal ordered before it, so a button
+pressed too early or a part already in place does not count. A goal that is only a waypoint (a mug brewed on the drip
+tray before it is served) must be reached but need not hold at the end. An episode succeeds at the first step at which
+every goal has been reached and every non-waypoint goal holds:
 
-$$\text{Base (Control):} \quad \mathbf{s}_0 \xrightarrow{a_{0:t^*}} \mathbf{s}_{t^*} \xrightarrow{\text{nominal continuation}} \text{Outcome}$$
+J(π; κ) = Pr over s₀ ~ ρ₀ and τ ~ π of [ there is t ≤ H with s_t ⊨ g₁ ∧ … ∧ g_k in order ].
 
-$$\text{Dynamic (Intervention):} \quad \mathbf{s}_0 \xrightarrow{a_{0:t^*}} \mathbf{s}_{t^*} \xrightarrow{\mathbf{Event} \;\; \Pi_{t^*, \Delta\mathbf{x}}} \mathbf{s}'_{t^*} \xrightarrow{\text{policy adapts}} \text{Outcome}$$
+## 3. Attainable goals and tolerances
 
-1. **Exact Pre-Event Replay**: The policy executes nominally up to trigger point $t^*$. The recorded action prefix $a_{0:t^*}$ is strictly replayed in the Dynamic arm, ensuring zero stochastic drift before intervention.
-2. **Trigger Timing**:
-   - `pre_grasp_proximity`: Triggers when the gripper descends within $8\,\text{cm}$ of the manipulated workpiece.
-   - `mid_approach_step`: Triggers at step $t^* = T_{\text{approach}} / 2$.
-3. **Exogenous Intervention**:
-   - Workpiece displacement: $\Delta \mathbf{x} = [\Delta x, \Delta y, 0]$ with $|\Delta \mathbf{x}| = 3.0\,\text{cm}$ along canonical axes (`+x`, `-x`, `+y`, `-y`).
-   - Velocities zeroed ($\mathbf{v}_{\text{obj}} \leftarrow \mathbf{0}$) to maintain stability.
-   - Domain 8 frontier events also include impulse wrenches and goal fixture shifts.
+Goal poses are not specified by hand. When a task is built, every goal body is lowered into its target and simulated
+to rest; the settled pose becomes the goal pose, and a pose that drifts more than 5 mm while settling rejects the
+task. There is no attachment, snapping, or teleport, so a body that slides, tips, or binds on a rim fails exactly as
+it would physically.
 
----
+| Goal type | (ε_xy, ε_θ) |
+| :--- | :--- |
+| point and stacking targets on precision workcells (jig, electronics, laboratory) | 2 mm, 5° |
+| point and stacking targets on the other workcells | 8 mm, 15° |
+| two loose fits (a bearing ring over a shaft, a centrifuge lid) | 6 mm |
+| region targets | the room left for the footprint inside the region |
 
-## 3. Physical Force & Actuator Torque Compliance (The Key Advantage)
+A static check verifies, before any simulation, that every name in every goal and start exists in its workcell and
+that every ordering refers to existing goals. Starts are rejection-sampled: moved objects rest apart and flat in their
+start regions with no fixture overhead and a collision-free top-down grasp, and no goal without predecessors may hold
+at reset.
 
-A critical limitation of kinematic-only benchmarks (such as LIBERO-MAX) is that they evaluate policies purely on visual and geometric completion: if an arm drives an object into a fixture with infinite force or binds an insertion peg with saturating torques, kinematic simulators score it as a "success".
+## 4. Task set
 
-PLUMB-Bench measures **Compliant Dynamic Robustness**:
+210 tasks in seven domains of 30, over six workcells (an assembly jig with a vise and a parts pallet, an electronics
+bench, a burger station with a grill, an espresso station, a sorting table with bins and a drawer, and a laboratory
+bench with racks, a centrifuge, and a pipette), with 27 object types, 6 latching buttons, a drawer, and a vise jaw.
 
-$$\mathbf{S}_{\text{compliant}} = \mathbf{S}_{\text{dynamic}} \;\land\; (F_{\max} \le 150\,\text{N}) \;\land\; (\forall j, |\tau_j| \le \tau_{\max, j})$$
+| Domain | Workcells | Goal predicates | Goals per task | Tolerance (mm / °) |
+| :--- | :--- | :--- | :-: | :-: |
+| D1 Industrial | assembly jig, electronics | On, Pressed, Closed, Lifted, GripperAbove | 1 | 2 / 5 |
+| D2 Culinary | burger, espresso | On, Pressed, Slid, Touching | 1 | 8 / 15 |
+| D3 Domestic | sorting table | On, Closed, Slid, Touching | 1–2 | 8 / 15 |
+| D4 Laboratory | laboratory bench | On, HeldOver, Touching, Pressed, Lifted, GripperAbove, Slid | 1 | 2 / 5 |
+| D5 Long-horizon | five workcells | On, Pressed, HeldOver, Slid, Closed | 2–5 | 2–8 / 5–15 |
+| D6 Precision chain | jig, electronics, lab | On, Pressed, HeldOver, GripperAbove, Closed, Touching | 2–4 | 2 / 5 |
+| D7 Service chain | burger, espresso, sorting | On, Pressed, Closed, Slid | 2–6 | 8 / 15 |
 
-### Safety Envelope:
-1. **Cartesian Contact Force Threshold**:
-   - $F_{\max} \le 150.0\,\text{N}$ (ISO/TS 15066 transient/quasi-static contact limit for collaborative robotics).
-2. **Franka Emika Panda Actuator Torque Limits**:
-   $$\boldsymbol{\tau}_{\max} = [87.0, \; 87.0, \; 87.0, \; 87.0, \; 12.0, \; 12.0, \; 12.0]\,\text{N}\cdot\text{m}$$
+- **343 goals**: On 262, Pressed 29, HeldOver 11, Slid 11, Closed 11, Touching 10, GripperAbove 6, Lifted 3.
+- **Goals per task**: 1 goal: 119 tasks; 2: 58; 3: 27; 4: 4; 5: 1; 6: 1.
+- **Placement goals**: 134 point or stacking targets (69 at 2 mm, 14 at 6 mm, 51 at 8 mm) and 128 region targets.
+- Every instruction comes with step-by-step variants derived from its goals.
 
-Any episode that achieves the geometric goal but breaches $F_{\max} > 150\,\text{N}$ or saturates actuator torques is classified as a **Safety Violation**.
+## 5. Static distribution shift
 
----
+Suites are paired on seeds, so a change in success measures the shift rather than a new scene. Every shifted
+parameter is restored before the next sample.
 
-## 4. The Eight Evaluation Domains (D1–D8)
+| Level | `--suites` name | Parameters |
+| :--- | :--- | :--- |
+| L1 Nominal | `nominal` | each moved object starts uniformly in its own region (half-widths 2–40 mm, yaw up to ±10°–±45°), in one of two receptacles, or pre-assembled; the initial TCP is jittered by ±1.5 cm per horizontal axis |
+| L2 Spatial | `p2_spatial` | region starts move by a radius U(7, 12) cm in a random direction, outside the L1 support, with yaw magnitude U(45°, 90°) |
+| L3 Visual | `p3_visual` | light intensities scaled by U(0.5, 1.5) and light positions jittered by ±0.5 m |
+| Color | `p1_object` | colors of the moved objects scaled by ±25% |
+| L4 Physical | `p4_physical` | sliding friction μ ~ U(0.12, 0.25) on every moved object and both finger pads; mass and rotational inertia scaled by U(1.8, 2.5); layout and appearance unchanged |
+| L5 Compound | `combined_ood` | L2, L3, L4, and color shifts sampled jointly |
 
-| Domain | Name | Focus & Constraints | Clearance |
-| :--- | :--- | :--- | :---: |
-| **D1** | Industrial Precision | Shaft, gear, and pin insertions into machined jig bores | $\pm 2.0\text{--}2.5\,\text{mm}$ |
-| **D2** | Culinary Operations | Patty stacking, cheese topping, and bun crowning without slip | Surface Contact |
-| **D3** | Domestic Tabletop | Multi-color block sorting among active workspace clutter | $\pm 8.0\,\text{mm}$ |
-| **D4** | Laboratory Sciences | Centrifuge micro-tube docking and pipette aspiration | $\pm 2.0\,\text{mm}$ |
-| **D5** | Long Horizon | Multi-stage transmission and burger assembly (up to 6 goals) | Stage-Locked |
-| **D6** | Precision Chaining | Shaft $\to$ bearing $\to$ clamp compound alignment | Compound |
-| **D7** | Service & Assembly | Food tray clearing, condiment placement, and surface wiping | Multi-Phase |
-| **D8** | Frontier Complex | Reactive mid-trajectory perturbations, tool use, and detents | $\pm 3.0\text{--}5.0\,\text{mm}$ |
+**Pairing.** A seed gives the identical start layout in L1, L3, and Color, and in L4 for 98.7% of seeds; L5 matches
+L2 within 1 mm for 97.0% (changed friction and mass occasionally make the physical start check redraw a start).
 
----
+**Contact model.** Finger pads use stiff contacts with torsional friction and elliptic friction cones, and collisions
+use MuJoCo's native convex collision with multi-point contact.
 
-## 5. Statistical Reporting & Metrics
+## 6. Matched mid-execution events
 
-For every evaluated policy, benchmark reports must provide:
+An event case pairs a **Base** rollout with a **Dynamic** rollout that share the task, seed, initial state, and
+executed action prefix and differ by one event (following LIBERO-MAX).
 
-1. **Paired Outcome Quadrants**:
-   - **Preserved Success $(1, 1)$**: Succeeds in both Base and Dynamic arms.
-   - **Event-Associated Regression $(1, 0)$**: Succeeds in Base, but fails after the dynamic disturbance.
-   - **Change-Associated Recovery $(0, 1)$**: Fails in Base, but succeeds in Dynamic.
-   - **Persistent Failure $(0, 0)$**: Fails in both arms.
-2. **Conditional Regression Rate**:
-   $$\text{CRR} = \frac{\text{count}(1, 0)}{\text{count}(1, 1) + \text{count}(1, 0)}$$
-3. **Paired Difference**:
-   $$\Delta \text{SR} = \text{SR}_{\text{dynamic}} - \text{SR}_{\text{base}} \quad (\text{percentage points})$$
-4. **95% Bootstrap Confidence Intervals**:
-   - Calculated over 2,000 stratified bootstrap resamples of matched pairs.
-5. **Force Telemetry**:
-   - Mean peak contact force $\bar{F}_{\text{base}}$ vs. $\bar{F}_{\text{dynamic}}$.
-   - Force violation rate ($F_{\max} > 150\,\text{N}$).
-   - Compliant Dynamic Success Rate.
+- **Event body**: the first moved body that starts free in a region.
+- **Trigger t\***: the first step at which the hand arrives above the event body (within 3 cm horizontally and 15 cm
+  above it, not yet grasped) in the Base rollout.
+- **Event**: the Dynamic rollout replays the Base actions up to t\*, displaces the body by 3 cm along +x, −x, +y, or
+  −y at rest, and hands control back to the policy.
+- **Validity**: the body must land on a support within 3 mm of the height of its original one and penetrate nothing
+  by more than 1 mm.
+- **Outcomes**: preserved success (1, 1), regression (1, 0), recovery (0, 1), persistent failure (0, 0).
+- **Metrics**: the paired change ΔSR = SR_Dynamic − SR_Base and the conditional regression rate
+  CRR = n₁₀ / (n₁₁ + n₁₀).
 
----
+The reference set has **921 matched pairs on 154 tasks** (every task with a free-standing event body; 2 seeds and up
+to 4 directions per task). It is produced by `scripts/diagnostic_probes.py events`.
 
-## 6. Comparison with Existing Manipulation Benchmarks
+## 7. Evaluation protocol
 
-| Dimension | LIBERO / LIBERO-PRO | LIBERO-MAX | Robomimic | PLUMB-Bench |
-| :--- | :---: | :---: | :---: | :---: |
-| **Task Scope** | 130 static tasks | 8,000 paired shifts | 6 environments | **240 physical tasks (D1–D8)** |
-| **Evaluation Mode** | Static ($t=0$) | Dynamic ($t^*$) | Static ($t=0$) | **Both Static (L1–L5) & Dynamic** |
-| **Force Sensing** | ❌ None | ❌ None | ❌ None | ✅ **3-D $F_{\text{contact}}$ vectors** |
-| **Actuator Torques** | ❌ None | ❌ None | ❌ None | ✅ **7-D $\boldsymbol{\tau}_{\text{act}}$ channels** |
-| **Safety Violations** | ❌ None | ❌ None | ❌ None | ✅ **$F_{\max} > 150\,\text{N}$ & $\boldsymbol{\tau}_{\max}$ checks** |
-| **Clearance Tiers** | Coarse ($>15\,\text{mm}$) | Coarse ($>15\,\text{mm}$) | Coarse ($>10\,\text{mm}$) | **Millimeter-level ($\pm 2.0\,\text{mm}$)** |
-| **Friction / Slip** | Kinematic drag | Kinematic drag | Soft penalty | **Elliptic friction cones (impratio 10)** |
+- **Training data**: 50 oracle demonstrations per task.
+- **Evaluation**: 50 episodes per task and condition, plus the 921 event pairs.
+- **Seeds**: evaluation episode seeds are `seed_base + 1000 · task_number + j` (j < episodes, default
+  `seed_base` 200,000); generation seeds are `42 + 1000 · task_number + k` (k < 400). Within each task the two are
+  disjoint, and the same seeds are used in every suite.
+- **Metrics**: success rate with 95% task-bootstrap intervals (Wilson intervals are also reported), goal completion
+  (the fraction of a task's goals reached), the physical robustness index PRI = SR(shifted) / SR(L1), ΔSR and CRR for
+  events, and the peak contact force on the robot as logged telemetry. Contact force is not part of success.
+- **Tool**: `scripts/evaluate_policy_suite.py` (`--checkpoint` for a trained policy, `--policy oracle|random|null`
+  for the references) writes `episodes.csv`, `summary.json`, and provenance including the checkpoint hash.
+
+## 8. Reference ceilings and floors
+
+A single privileged closed-loop oracle solves all 210 tasks through the same controller and action space as a learned
+policy. It reads poses that policies do not observe, so its success bounds solvability rather than predicting learned
+performance.
+
+| Condition | Oracle success (%) | Random | Null |
+| :--- | :-: | :-: | :-: |
+| L1 Nominal | 99.9 [99.7, 100.0] | 0 / 630 | 0 / 210 |
+| L3 Visual | 99.9 [99.7, 100.0] | 0 / 630 | 0 / 210 |
+| Color | 99.9 [99.7, 100.0] | 0 / 630 | 0 / 210 |
+| L4 Physical | 98.9 [98.1, 99.5] | 0 / 630 | 0 / 210 |
+| L2 Spatial | 97.7 [96.4, 98.9] | 0 / 630 | 0 / 210 |
+| L5 Compound | 95.6 [94.0, 97.1] | 0 / 630 | 0 / 210 |
+
+5 oracle episodes per task and condition (6,300 in total); every domain is at 89.3% or above in every condition.
+On the 921 event pairs the oracle has a Dynamic success rate of 97.5% (CRR 2.4%).
+
+## 9. Data format
+
+The oracle generates demonstrations in robomimic HDF5 with both cameras, proprioception, the full simulator state at
+every step, the instruction, and provenance (code version, simulator version, command, attempted and rejected seeds).
+Files are written atomically and validated episode by episode (`scripts/validate_datasets.py`); replaying the recorded
+actions of sampled demonstrations reproduces their recorded states exactly. `scripts/convert_to_rlds.py` and
+`scripts/convert_to_lerobot.py` export RLDS and LeRobot datasets.
+
+## 10. Not part of the benchmark
+
+- The earlier single-body task set (`task_set="legacy"`) is deprecated and kept only to read and replay its files.
+- `benchmark/manifests/`, `benchmark/lite/`, `afford_pro/dynamic_suite.py`, and `scripts/evaluate_paired_dynamic.py`
+  belong to that task set. The event protocol of Sec. 6 is implemented in `scripts/diagnostic_probes.py events`.
+- The earlier "compliant dynamic success" score (a 150 N contact-force limit and actuator torque limits) is not used;
+  contact force is reported only as telemetry (Sec. 7).

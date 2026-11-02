@@ -57,8 +57,13 @@ libero_pro_full_text.txt
 scratch/
 
 
-# Paper source and drafts (kept local, not published)
+# Paper source and drafts (kept local, not published; double-blind submission)
 AFFORD-Bench_RSS'27/
+PLUMB-Bench_RSS*/
+*_RSS'[0-9][0-9]/
+/paper/
+/paper-template-latex/
+*.synctex.gz
 
 # Evaluation outputs
 results/
